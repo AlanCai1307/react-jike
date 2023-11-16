@@ -8,12 +8,26 @@ const Login = () => {
       <Card className="login-container">
         <img className="login-logo" src={logo} alt="" />
         {/* 登录表单 */}
-        <Form>
-          <Form.Item>
+        <Form validateTrigger={['onBlur']}>
+          <Form.Item
+            name="mobile"
+            rules={[
+              { required: true, message: '请输入手机号' },
+              {
+                pattern: /^1[3-9]\d{9}$/,
+                message: '手机号码格式不对'
+              }
+            ]}
+          >
             <Input size="large" placeholder="请输入手机号" />
           </Form.Item>
-          <Form.Item>
-            <Input size="large" placeholder="请输入验证码" />
+          <Form.Item
+            name="code"
+            rules={[
+              { required: true, message: '请输入验证码' },
+            ]}
+          >
+            <Input size="large" placeholder="请输入验证码" maxLength={6}/>
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit" size="large" block>
