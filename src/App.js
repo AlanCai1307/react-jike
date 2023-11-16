@@ -1,6 +1,9 @@
+import { Button } from 'antd';
 function App() {
   return (
-    <div>this is app</div>
+    <div>
+      <Button type="primary">Button</Button>
+    </div>
   );
 }
 
