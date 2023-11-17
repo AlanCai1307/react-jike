@@ -9,7 +9,7 @@ const Login = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   // 点击登录按钮时触发 参数values即是表单输入数据
-  const onFinish = async formValue => {
+  const onFinish = async (formValue) => {
     console.log(formValue)
     await dispatch(fetchLogin(formValue))
     // 1. 跳转到首页
