@@ -7,7 +7,7 @@ import {
   Input,
   Upload,
   Space,
-  Select
+  Select, message
 } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
@@ -16,6 +16,7 @@ import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import {useEffect, useState} from "react";
 import {request} from "@/utils";
+import {createArticleAPI} from "@/apis/article";
 const { Option } = Select
 
 const Publish = () => {
@@ -30,6 +31,22 @@ const Publish = () => {
     }
     fetchChannels()
   }, [])
+  // 发布文章
+  const onFinish = async (formValue) => {
+    const { channel_id, content, title } = formValue
+    const params = {
+      channel_id,
+      content,
+      title,
+      type: 1,
+      cover: {
+        type: 1,
+        images: []
+      }
+    }
+    await createArticleAPI(params)
+    message.success('发布文章成功')
+  }
   return (
     <div className="publish">
       <Card
@@ -45,6 +62,7 @@ const Publish = () => {
           labelCol={{ span: 4 }}
           wrapperCol={{ span: 16 }}
           initialValues={{ type: 1 }}
+          onFinish={onFinish}
         >
           <Form.Item
             label="标题"
