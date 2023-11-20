@@ -6,10 +6,11 @@ import {
   LogoutOutlined,
 } from '@ant-design/icons'
 import './index.scss'
-import {Outlet, useLocation, useNavigate} from 'react-router-dom'
-import {useEffect} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {clearUserInfo, fetchUserInfo} from "@/store/modules/user";
+import { Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchUserInfo, clearUserInfo } from '@/store/modules/user'
+
 const { Header, Sider } = Layout
 
 const items = [
@@ -31,25 +32,33 @@ const items = [
 ]
 
 const GeekLayout = () => {
-  const location = useLocation()
-  const selectedKey = location.pathname
   const navigate = useNavigate()
-  const menuClick = (route) => {
-    navigate(route.key)
+  const onMenuClick = (route) => {
+    console.log('菜单被点击了', route)
+    const path = route.key
+    navigate(path)
   }
 
-  //获取个人信息
+  // 反向高亮
+  // 1. 获取当前路由路径
+  const location = useLocation()
+  console.log(location.pathname)
+  const selectedkey = location.pathname
+
+  // 触发个人用户信息action
   const dispatch = useDispatch()
-  const name = useSelector(state => state.user.userInfo.name)
   useEffect(() => {
     dispatch(fetchUserInfo())
   }, [dispatch])
 
-  // 退出登录
-  const loginOut = () => {
+  // 退出登录确认回调
+  const onConfirm = () => {
+    console.log('确认退出')
     dispatch(clearUserInfo())
     navigate('/login')
   }
+
+  const name = useSelector(state => state.user.userInfo.name)
   return (
     <Layout>
       <Header className="header">
@@ -57,7 +66,7 @@ const GeekLayout = () => {
         <div className="user-info">
           <span className="user-name">{name}</span>
           <span className="user-logout">
-            <Popconfirm title="是否确认退出？" okText="退出" cancelText="取消" onConfirm={loginOut}>
+            <Popconfirm title="是否确认退出？" okText="退出" cancelText="取消" onConfirm={onConfirm}>
               <LogoutOutlined /> 退出
             </Popconfirm>
           </span>
@@ -68,14 +77,14 @@ const GeekLayout = () => {
           <Menu
             mode="inline"
             theme="dark"
-            selectedKeys={selectedKey}
+            selectedKeys={selectedkey}
+            onClick={onMenuClick}
             items={items}
-            style={{ height: '100%', borderRight: 0 }}
-            onClick={menuClick}
-          />
+            style={{ height: '100%', borderRight: 0 }}></Menu>
         </Sider>
         <Layout className="layout-content" style={{ padding: 20 }}>
-          <Outlet/>
+          {/* 二级路由的出口 */}
+          <Outlet />
         </Layout>
       </Layout>
     </Layout>
