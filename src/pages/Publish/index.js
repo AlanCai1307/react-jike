@@ -33,16 +33,25 @@ const Publish = () => {
   }, [])
   // 发布文章
   const onFinish = async (formValue) => {
+    // 校验封面类型imageType是否和实际的图片列表imageList数量是相等的
+    if (imageList.length !== imageType) return message.warning('封面类型和图片数量不匹配')
     const { channel_id, content, title } = formValue
     const params = {
       channel_id,
       content,
       title,
-      type: 1,
       cover: {
-        type: 1,
-        images: []
-      }
+        type: imageType, // 封面模式
+        // 这里的url处理逻辑只是在新增时候的逻辑
+        // 编辑的时候需要做处理
+        images: imageList.map(item => {
+          if (item.response) {
+            return item.response.data.url
+          } else {
+            return item.url
+          }
+        }) // 图片列表
+      },
     }
     await createArticleAPI(params)
     message.success('发布文章成功')
