@@ -15,6 +15,11 @@ const Article = () => {
   // 获取频道列表
   const { channelList } = useChannel()
   // 准备列数据
+  // 定义状态枚举
+  const status = {
+    1: <Tag color='warning'>待审核</Tag>,
+    2: <Tag color='success'>审核通过</Tag>,
+  }
   const columns = [
     {
       title: '封面',
@@ -32,7 +37,7 @@ const Article = () => {
     {
       title: '状态',
       dataIndex: 'status',
-      render: data => <Tag color="green">审核通过</Tag>
+      render: data => status[data]
     },
     {
       title: '发布时间',
